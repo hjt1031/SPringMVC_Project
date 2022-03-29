@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -80,13 +81,32 @@ public class BasicItemController {
         return "basic/item";
     }
 
-    @PostMapping("/add")
+//    @PostMapping("/add")
     // ModelAttribute 생략 가능
     public String addItemV4(Item item){
         itemRepository.save(item);
         return "basic/item";
     }
 
+    /**
+     * 새로고집(마지막 요청을 다시 요청한다) 하면 POST 요청을 다시 요청을 하기 떄문에 계속 상품이 등록이 된다.
+     */
+    // 리다이렉트
+//    @PostMapping("/add")
+    public String addItemV5(Item item){
+        itemRepository.save(item);
+        return "redirect:/basic/items/" + item.getId();
+    }
+
+    // 리다이렉트에트리뷰트 (메시지 추가)
+    //redirectAttributes 를 사용하면 URL 인코딩도 해주고, pathVarible 쿼리 파라미터까지 처리해준다.
+    @PostMapping("/add")
+    public String addItemV6(Item item, RedirectAttributes redirectAttributes){
+        Item savedItem = itemRepository.save(item);
+        redirectAttributes.addAttribute("itemId", savedItem.getId());
+        redirectAttributes.addAttribute("status",true);
+        return "redirect:/basic/items/{itemId}";
+    }
 
     //상품 수정 폼
     @GetMapping("/{itemId}/edit")
