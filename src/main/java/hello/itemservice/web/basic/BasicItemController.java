@@ -18,9 +18,6 @@ import java.util.List;
 public class BasicItemController {
 
     private final ItemRepository itemRepository;
-
-
-
     // 생성자하가 하나면 Autowired 생략 가능, @RequiredArgsConstructor 사용하면 final 이 붙은 생성자를 만들어준다.
 //    @Autowired
 //    public BasicItemController(ItemRepository itemRepository) {
